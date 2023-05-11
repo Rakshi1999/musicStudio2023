@@ -3,14 +3,14 @@ const dotenv = require("dotenv");
 dotenv.config();
 require("./connectToDb");
 const User = require("./models/userModel");
-// const cors = require("cors");
+const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const sendMail = require("./sendMail");
 const app = express();
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 // app.use(express.static(path.join(__dirname, "build")));
 
