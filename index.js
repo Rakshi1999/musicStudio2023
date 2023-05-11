@@ -27,16 +27,16 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.get("/signup", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+// app.get("/signup", (req, res) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-app.get("/mymusic", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+// app.get("/login", (req, res) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
+// app.get("/mymusic", (req, res) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
 app.get("/verify", async (req, res) => {
   const token = req.headers;
@@ -156,6 +156,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get('/getData',(req,res)=>{
+  res.json({name:"Rakshith",age:52});
+})
+
 app.get("/logout", (req, res) => {
   const token = req.headers.authorization;
   jwt.verify(token, process.env.JWT_SECRET, async (err, details) => {
@@ -175,5 +179,5 @@ app.get("/logout", (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log("listening in port 4000");
+  console.log(`listening in port ${process.env.PORT}`);
 });
