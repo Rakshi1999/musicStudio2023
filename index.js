@@ -12,7 +12,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-// app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "build")));
 
 function generateOTP() {
   var digits = "0123456789";
