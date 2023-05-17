@@ -23,26 +23,28 @@ function generateOTP() {
   return Number(OTP);
 }
 
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
-// app.get("/signup", (req, res) => {
-//   res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
+app.get("/signup", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
-// app.get("/login", (req, res) => {
-//   res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
-// app.get("/mymusic", (req, res) => {
-//   res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+app.get("/mymusic", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.get("/verify", async (req, res) => {
   const token = req.headers;
   jwt.verify(token.authorization, process.env.JWT_SECRET, async (err, user) => {
     if (err) {
-      res.status(401).json({ message: "token not valid, kindly login again" });
+      return res
+        .status(401)
+        .json({ message: "token not valid, kindly login again" });
     }
     let userDetails = await User.findOne({ email: user.email });
     // console.log(userDetails);
@@ -56,7 +58,9 @@ app.get("/verify", async (req, res) => {
 });
 
 app.post("/emailverify", async (req, res) => {
+  const token = req.headers;
   let user = await User.findOne({ email: req.body.email });
+  console.log(user);
   if (user.otp == req.body.otp) {
     jwt.sign(
       { email: user.email },
@@ -70,7 +74,7 @@ app.post("/emailverify", async (req, res) => {
         }
         await User.findOneAndUpdate(
           { email: req.body.email },
-          { $set: { token: [...user.token, newToken] } }
+          { $set: { token: [...user.token, newToken], isverified: true } }
         );
         res.status(200).json({
           message: "Success",
@@ -99,7 +103,7 @@ app.post("/signup", async (req, res) => {
         let sendOtp = generateOTP();
         await User.findOneAndUpdate(
           { email: req.body.email },
-          { $set: { otp: sendOtp } }
+          { $set: { otp: sendOtp, isverified: false } }
         );
         const options = {
           to: req.body.email,
@@ -119,8 +123,12 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
-  // console.log(user);
+  console.log(user);
   if (user) {
+    // console.log(!user.isverified);
+    if (!user.isverified) {
+      return res.status(400).json({ message: "otp" });
+    }
     let check = await bcrypt.compare(req.body.password, user.password);
     // console.log(check);
     if (check) {
@@ -156,12 +164,15 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get('/getData',(req,res)=>{
-  res.json({name:"Rakshith",age:52});
-})
+app.get("/getData", (req, res) => {
+  res.json({ name: "Rakshith", age: 25 });
+});
 
 app.get("/logout", (req, res) => {
   const token = req.headers.authorization;
+  if (!token) {
+    return res.status(400).json({ message: "Something Went Wrong!!" });
+  }
   jwt.verify(token, process.env.JWT_SECRET, async (err, details) => {
     if (err) {
       res

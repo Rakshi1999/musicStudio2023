@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7d5b9c8d.css",
+    "main.js": "/static/js/main.f38d0554.js",
+    "static/media/Replay - Iyaz.mp3": "/static/media/Replay - Iyaz.cba783749fb02c177ea7.mp3",
+    "static/media/Ed Sheeran - Shape of You.mp3": "/static/media/Ed Sheeran - Shape of You.6a393cf83b7d2f6af618.mp3",
+    "static/media/Jaymes Young - Infinity.mp3": "/static/media/Jaymes Young - Infinity.2c914898d33632922fba.mp3",
+    "static/media/Gym Class Heroes - Stereo Hearts.mp3": "/static/media/Gym Class Heroes - Stereo Hearts.c5775b424b58573b4cf3.mp3",
+    "static/media/Blue - One Love.mp3": "/static/media/Blue - One Love.a46753712a4c3bfd621e.mp3",
+    "static/media/Lost Sky - Fearless pt.II.mp3": "/static/media/Lost Sky - Fearless pt.II.c48e38e58a2db0a8ea7c.mp3",
+    "static/media/NEFFEX - Cold ❄️.mp3": "/static/media/NEFFEX - Cold ❄️.8940b7ccf3d70f0d004c.mp3",
+    "static/media/Love Is Gone.mp3": "/static/media/Love Is Gone.4644964505ec9ba4bcad.mp3",
+    "static/media/Otnicka - Peaky Blinder.mp3": "/static/media/Otnicka - Peaky Blinder.b5c82f69c932e5cdca98.mp3",
+    "static/media/Stay.mp3": "/static/media/Stay.db23eb8eb6496567a6a6.mp3",
+    "static/media/background-img 1.png": "/static/media/background-img 1.f60e9e16dc949ad9d179.png",
+    "static/media/1.jpeg": "/static/media/1.4fd514f5864714ec7bcd.jpeg",
+    "static/media/2.jpeg": "/static/media/2.9866566a167798713ef3.jpeg",
+    "static/media/4.jpeg": "/static/media/4.178be109cd4f22cda41a.jpeg",
+    "static/media/mymusic.png": "/static/media/mymusic.b0aa2f3ec795c3e4311c.png",
+    "static/media/3.jpeg": "/static/media/3.faf0323f1f4de6f26bc0.jpeg",
+    "static/media/5.jpeg": "/static/media/5.b8cf54d0225f39cb936e.jpeg",
+    "static/media/6.jpeg": "/static/media/6.01bfffb909bb7cd73971.jpeg",
+    "static/media/8.jpeg": "/static/media/8.72e4e4ef61f4f058ee2f.jpeg",
+    "index.html": "/index.html",
+    "main.7d5b9c8d.css.map": "/static/css/main.7d5b9c8d.css.map",
+    "main.f38d0554.js.map": "/static/js/main.f38d0554.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7d5b9c8d.css",
+    "static/js/main.f38d0554.js"
+  ]
+}
