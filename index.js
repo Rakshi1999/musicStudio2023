@@ -60,7 +60,7 @@ app.get("/verify", async (req, res) => {
 app.post("/emailverify", async (req, res) => {
   const token = req.headers;
   let user = await User.findOne({ email: req.body.email });
-  console.log(user);
+  // console.log(user);
   if (user.otp == req.body.otp) {
     jwt.sign(
       { email: user.email },
@@ -123,7 +123,7 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
-  console.log(user);
+  // console.log(user);
   if (user) {
     // console.log(!user.isverified);
     if (!user.isverified) {
