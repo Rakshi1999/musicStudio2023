@@ -11,7 +11,7 @@ const sendMail = require("./sendMail");
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "25mb" }));
 app.use(express.static(path.join(__dirname, "build")));
 
 function generateOTP() {
@@ -89,9 +89,7 @@ app.post("/emailverify", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  // console.log(req.body);
   let user = await User.findOne({ email: req.body.email });
-  // console.log(user);
   if (user) {
     return res.status(409).json({ message: "Email already exists" });
   } else {
@@ -187,6 +185,59 @@ app.get("/logout", (req, res) => {
     );
     res.status(200).json({ message: "Logged Out Successfully" });
   });
+});
+
+app.post("/profile", async (req, res) => {
+  console.log(req.body.userData);
+  const token = req.headers;
+  let email = getEmail(token);
+  try {
+    const user = await User.findOneAndUpdate(
+      { email},
+      { $set: { dp: req.body.dp, profileData: req.body.userData } },
+      { new: true }
+    );
+    console.log(user);
+    res.status(200).json({ message: "profile is updated" });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: "Something went wrong" });
+  }
+});
+
+function verifyJwtMiddleware(req, res, next) {
+  try {
+    const token = req.headers;
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.status(400).json({ message: "Unathorized, access denied" });
+      }
+      next();
+    });
+  } catch (e) {
+    return res.status(400).json({ message: "Something went wrong" });
+  }
+}
+function getEmail(token) {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return null;
+    }
+    return user.email;
+  });
+}
+
+app.get("/profile", verifyJwtMiddleware, async (req, res) => {
+  try {
+    let email = getEmail(token);
+    let user = await User.find({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    return res.send(200).json({ dp: user.dp, userData: user.userData });
+  } catch (e) {
+    return res.status(400).json({ message: "Something went wrong" });
+  }
 });
 
 app.listen(process.env.PORT, () => {
