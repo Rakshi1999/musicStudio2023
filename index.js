@@ -188,53 +188,64 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/profile", async (req, res) => {
-  console.log(req.body.userData);
-  const token = req.headers;
-  let email = getEmail(token);
+  // console.log(req.body.userData);
+  const token = req.headers.authorization;
+  // console.log(token);
+  let email = "";
+  await jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(400).json({ message: "Somthing went Wrong" });
+    }
+    email = user.email;
+  });
+
   try {
     const user = await User.findOneAndUpdate(
-      { email},
+      { email },
       { $set: { dp: req.body.dp, profileData: req.body.userData } },
       { new: true }
     );
-    console.log(user);
+    // console.log(user);
     res.status(200).json({ message: "profile is updated" });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(400).json({ message: "Something went wrong" });
   }
 });
 
-function verifyJwtMiddleware(req, res, next) {
-  try {
-    const token = req.headers;
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.status(400).json({ message: "Unathorized, access denied" });
-      }
-      next();
-    });
-  } catch (e) {
-    return res.status(400).json({ message: "Something went wrong" });
-  }
-}
-function getEmail(token) {
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+app.post("/profilepic", async (req, res) => {
+  const token = req.headers.authorization;
+  jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
     if (err) {
-      return null;
+      return res.status(400).json({ message: "Somthing went Wrong" });
     }
-    return user.email;
+    await User.findOneAndUpdate(
+      { email: user.email },
+      { $set: { dp: req.body.dp } },
+      { new: true }
+    );
+    return res.status(200).json({ message: "picture updated successfully" });
   });
-}
+});
 
-app.get("/profile", verifyJwtMiddleware, async (req, res) => {
+app.get("/profile", async (req, res) => {
+  // console.log("next");
+  const token = req.headers.authorization;
+  // console.log(token);
   try {
-    let email = getEmail(token);
-    let user = await User.find({ email });
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-    return res.send(200).json({ dp: user.dp, userData: user.userData });
+    await jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+      if (err) {
+        return res.status(400).json({ message: "Something Went Wrong" });
+      }
+      let dbUser = await User.findOne({ email: user.email });
+      // console.log(dbUser);
+      if (!dbUser) {
+        return res.status(400).json({ message: "User not found" });
+      }
+      return res
+        .status(200)
+        .json({ dp: dbUser.dp, userData: dbUser.profileData });
+    });
   } catch (e) {
     return res.status(400).json({ message: "Something went wrong" });
   }
