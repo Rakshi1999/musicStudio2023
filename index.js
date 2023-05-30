@@ -191,26 +191,24 @@ app.post("/profile", async (req, res) => {
   // console.log(req.body.userData);
   const token = req.headers.authorization;
   // console.log(token);
-  let email = "";
-  await jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  // let email = "";
+  jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
     if (err) {
       return res.status(400).json({ message: "Somthing went Wrong" });
     }
-    email = user.email;
+    try {
+      const dbUser = await User.findOneAndUpdate(
+        { email: user.email },
+        { $set: { dp: req.body.dp, profileData: req.body.userData } },
+        { new: true }
+      );
+      // console.log(user);
+      res.status(200).json({ message: "profile is updated" });
+    } catch (e) {
+      // console.log(e);
+      res.status(400).json({ message: "Something went wrong" });
+    }
   });
-
-  try {
-    const user = await User.findOneAndUpdate(
-      { email },
-      { $set: { dp: req.body.dp, profileData: req.body.userData } },
-      { new: true }
-    );
-    // console.log(user);
-    res.status(200).json({ message: "profile is updated" });
-  } catch (e) {
-    // console.log(e);
-    res.status(400).json({ message: "Something went wrong" });
-  }
 });
 
 app.post("/profilepic", async (req, res) => {
