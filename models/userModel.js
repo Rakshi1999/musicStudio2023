@@ -9,6 +9,8 @@ const userSchema = new Schema({
   token: { type: Array },
   isverified: { type: Boolean },
   otp: { type: Number },
+  dp: { type: String },
+  profileData: { type: Object },
 });
 
 const User = mongoose.model("user_signup_info", userSchema);
