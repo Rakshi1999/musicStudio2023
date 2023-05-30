@@ -40,6 +40,7 @@ app.get("/mymusic", (req, res) => {
 
 app.get("/verify", async (req, res) => {
   const token = req.headers;
+  // console.log(token);
   jwt.verify(token.authorization, process.env.JWT_SECRET, async (err, user) => {
     if (err) {
       return res
